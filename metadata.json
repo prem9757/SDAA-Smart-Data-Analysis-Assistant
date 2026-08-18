@@ -1,0 +1,6 @@
+{
+  "name": "SDA",
+  "description": "SDA (Smart Data Analysis Assistant) — Production-Level Universal AI Data Cleaning, Validation, Visual Analytics & BI Engine",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
