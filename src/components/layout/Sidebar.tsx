@@ -5,14 +5,11 @@ import {
   Wand2,
   Table2, 
   BarChart3, 
-  Terminal, 
-  Cpu, 
-  MessageSquareCode, 
-  Sparkles,
+  Search, 
+  Brain, 
+  MessageSquare, 
   ChevronRight,
-  ShieldCheck,
-  Zap,
-  FileCheck
+  ShieldCheck
 } from 'lucide-react';
 import { Dataset } from '../../types/dataset';
 
@@ -38,29 +35,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'overview',
       label: 'Summary & Insights',
       icon: LayoutDashboard,
-      description: 'Key takeaways & data health score',
-      badge: 'AI Insights',
+      description: 'Key takeaways & dashboard',
+      badge: 'AI INSIGHTS',
+      badgeColor: 'cyan',
     },
     {
       id: 'profiling',
       label: 'Data Profiling & Quality',
       icon: ShieldCheck,
-      description: '15-col profiling & candidate keys',
-      badge: dataset?.profile ? `${dataset.profile.overallQualityScore}/100` : 'Engine',
+      description: 'Data completeness & issues',
+      badge: dataset?.profile ? `${dataset.profile.overallQualityScore}/100` : '98/100',
+      badgeColor: 'cyan',
     },
     {
       id: 'cleaning',
       label: 'Clean & Fix Data',
       icon: Wand2,
-      description: 'Autonomous 1-click clean & validation',
-      badge: dataset ? (dataset.health.missingnessRate > 0 ? `${dataset.health.missingnessRate}% missing` : 'Auto-Clean') : undefined,
+      description: 'Autonomous cleaning',
+      badge: 'AUTO-CLEAN',
+      badgeColor: 'cyan',
     },
     {
       id: 'table',
       label: 'View Data Rows',
       icon: Table2,
-      description: 'Browse, search & filter rows',
-      badge: dataset ? `${dataset.rows.length} rows` : undefined,
+      description: 'Browse, search & filter',
+      badge: dataset ? `${dataset.rows.length} ROWS` : '13 ROWS',
+      badgeColor: 'cyan',
     },
     {
       id: 'charts',
@@ -71,77 +72,90 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       id: 'sql',
       label: 'Search & Ask Questions',
-      icon: Terminal,
-      description: 'Ask questions or run custom searches',
+      icon: Search,
+      description: 'Ask questions or run search',
     },
     {
       id: 'automl',
       label: 'Smart AI Predictions',
-      icon: Cpu,
-      description: 'Predict trends & future numbers',
-      badge: 'AI Helper',
+      icon: Brain,
+      description: 'Predict trends & future',
+      badge: 'AI HELPER',
+      badgeColor: 'indigo',
     },
     {
       id: 'chat',
       label: 'Chat with AI Helper',
-      icon: MessageSquareCode,
+      icon: MessageSquare,
       description: 'Ask any question about your data',
-      badge: 'Live',
+      badge: 'LIVE',
+      badgeColor: 'magenta',
     },
   ];
 
   return (
     <aside
-      className={`relative flex flex-col border-r border-slate-200/80 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-md transition-all duration-300 z-30 shrink-0 ${
-        isCollapsed ? 'w-16' : 'w-64'
+      className={`relative flex flex-col border-r border-[#27345A] bg-[#080D1F] transition-all duration-300 z-30 shrink-0 select-none ${
+        isCollapsed ? 'w-16' : 'w-72'
       }`}
     >
       {/* Navigation List */}
-      <div className="flex-1 space-y-1.5 p-3 overflow-y-auto">
+      <div className="flex-1 space-y-1.5 p-3 overflow-y-auto z-10">
         {!isCollapsed && (
-          <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-            Workspace Modules
+          <div className="px-3 pt-2 pb-3 text-[11px] font-bold uppercase tracking-widest text-[#94A3B8]">
+            WORKSPACE MODULES
           </div>
         )}
 
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
+          const isPredictions = item.id === 'automl';
 
           return (
             <button
               key={item.id}
               id={`nav-item-${item.id}`}
               onClick={() => onTabChange(item.id as TabType)}
-              className={`relative w-full flex items-center rounded-xl transition-all duration-200 group ${
+              className={`relative w-full flex items-center rounded-2xl transition-all duration-200 group text-left ${
                 isCollapsed ? 'justify-center p-3' : 'justify-between px-3.5 py-3'
               } ${
                 isActive
-                  ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/25 font-semibold'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100 font-medium'
+                  ? isPredictions
+                    ? 'bg-gradient-to-r from-[#7C3AED] via-[#6366F1] to-[#3B82F6] text-white shadow-xl shadow-[#7C3AED]/25 border border-transparent'
+                    : 'bg-[#151B35] border border-[#00E5FF]/60 text-[#F8FAFC] shadow-lg shadow-[#00E5FF]/10'
+                  : 'text-[#94A3B8] hover:bg-[#10162B] hover:text-[#F8FAFC] border border-transparent'
               }`}
             >
-              {/* Active Pill Indicator */}
-              {isActive && (
-                <motion.div
-                  layoutId="activeSidebarIndicator"
-                  className="absolute inset-0 rounded-xl bg-cyan-600 z-0"
-                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                />
-              )}
-
               <div className="relative z-10 flex items-center gap-3 min-w-0">
-                <Icon
-                  className={`h-5 w-5 shrink-0 transition-transform group-hover:scale-110 ${
-                    isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400 group-hover:text-cyan-500'
+                <div
+                  className={`flex items-center justify-center shrink-0 rounded-xl ${
+                    isActive && isPredictions
+                      ? 'h-8 w-8 bg-[#EC4899] text-white shadow-[0_0_12px_rgba(236,72,153,0.6)]'
+                      : isActive
+                      ? 'h-8 w-8 bg-[#00E5FF]/15 text-[#00E5FF]'
+                      : 'h-8 w-8 text-[#94A3B8] group-hover:text-[#00E5FF]'
                   }`}
-                />
+                >
+                  <Icon className="h-4.5 w-4.5" />
+                </div>
+
                 {!isCollapsed && (
                   <div className="text-left min-w-0 truncate">
-                    <p className="text-xs tracking-tight truncate">{item.label}</p>
                     <p
-                      className={`text-[10px] truncate ${
-                        isActive ? 'text-cyan-100' : 'text-slate-400 dark:text-slate-500'
+                      className={`text-xs font-bold tracking-tight truncate ${
+                        isActive ? 'text-white' : 'text-[#F8FAFC]'
+                      }`}
+                    >
+                      {item.label}
+                    </p>
+                    <p
+                      className={`text-[10px] truncate mt-0.5 ${
+                        isActive && isPredictions
+                          ? 'text-white/80'
+                          : isActive
+                          ? 'text-[#00E5FF]'
+                          : 'text-[#94A3B8]'
                       }`}
                     >
                       {item.description}
@@ -153,9 +167,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {!isCollapsed && item.badge && (
                 <span
                   className={`relative z-10 shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
-                    isActive
-                      ? 'bg-white/20 text-white'
-                      : 'bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300'
+                    isActive && isPredictions
+                      ? 'bg-white/20 text-white border border-white/30 backdrop-blur-xs'
+                      : item.badgeColor === 'magenta'
+                      ? 'bg-[#EC4899]/20 text-[#EC4899] border border-[#EC4899]/40'
+                      : 'bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30'
                   }`}
                 >
                   {item.badge}
@@ -166,45 +182,52 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Dataset Health Status Mini Widget at Bottom */}
-      {!isCollapsed && dataset && (
-        <div className="p-3 m-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-850/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-emerald-500" />
-              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                Data Health
-              </span>
-            </div>
-            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-              {dataset.health.score}/100
-            </span>
-          </div>
-
-          <div className="mt-2 h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                dataset.health.score >= 80
-                  ? 'bg-emerald-500'
-                  : dataset.health.score >= 60
-                  ? 'bg-amber-500'
-                  : 'bg-rose-500'
-              }`}
-              style={{ width: `${dataset.health.score}%` }}
+      {/* Cyber Neural Waves Ribbon Artwork at Bottom of Sidebar */}
+      {!isCollapsed && (
+        <div className="relative w-full h-32 overflow-hidden pointer-events-none mt-auto opacity-80">
+          <svg
+            viewBox="0 0 300 140"
+            className="w-full h-full"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="sidebarWaveCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#00E5FF" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.1" />
+              </linearGradient>
+              <linearGradient id="sidebarWavePurple" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#EC4899" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.2" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M-20,100 C60,40 120,130 200,60 C260,-5 290,70 320,120"
+              stroke="url(#sidebarWaveCyan)"
+              strokeWidth="2"
+              fill="none"
             />
-          </div>
-
-          <p className="mt-2 text-[10px] text-slate-400 dark:text-slate-500 flex items-center justify-between">
-            <span>Missingness: {dataset.health.missingnessRate}%</span>
-            <span>Outliers: {dataset.health.outlierCount}</span>
-          </p>
+            <path
+              d="M-20,120 C80,70 140,140 220,70 C280,15 300,90 330,130"
+              stroke="url(#sidebarWavePurple)"
+              strokeWidth="2.5"
+              fill="none"
+            />
+            <path
+              d="M-10,80 C70,110 160,50 240,110 C290,140 310,100 330,80"
+              stroke="url(#sidebarWaveCyan)"
+              strokeWidth="1.5"
+              strokeDasharray="4 4"
+              fill="none"
+            />
+          </svg>
         </div>
       )}
 
       {/* Sidebar Collapse Toggle Button */}
       <button
         onClick={onToggleCollapse}
-        className="absolute -right-3 top-20 flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 dark:border-slate-750 bg-white dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 shadow-md transition-all hover:scale-110 z-40"
+        className="absolute -right-3 top-20 flex h-6 w-6 items-center justify-center rounded-full border border-[#27345A] bg-[#10162B] text-[#94A3B8] hover:text-[#00E5FF] hover:border-[#00E5FF] shadow-lg transition-all hover:scale-110 z-40"
         title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         <ChevronRight
@@ -216,3 +239,4 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </aside>
   );
 };
+

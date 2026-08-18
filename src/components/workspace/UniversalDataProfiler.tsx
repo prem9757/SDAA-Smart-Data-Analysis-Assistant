@@ -63,7 +63,7 @@ export const UniversalDataProfiler: React.FC<UniversalDataProfilerProps> = ({
   const [statusFilter, setStatusFilter] = React.useState<string>('ALL');
   const [roleFilter, setRoleFilter] = React.useState<string>('ALL');
   const [expandedColumn, setExpandedColumn] = React.useState<string | null>(null);
-  const [activeTab, setActiveTab] = React.useState<'columns' | 'keys' | 'cross_rules' | 'correlations'>('columns');
+  const [activeTab, setActiveTab] = React.useState<'columns' | 'keys' | 'correlations'>('columns');
 
   // Filter columns
   const filteredColumns = React.useMemo(() => {
@@ -255,18 +255,6 @@ export const UniversalDataProfiler: React.FC<UniversalDataProfilerProps> = ({
           >
             <Key className="h-4 w-4" />
             <span>Candidate Primary Keys ({profile.structuralInfo.potentialPrimaryKeys.length})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('cross_rules')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'cross_rules'
-                ? 'bg-cyan-600 text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <ShieldCheck className="h-4 w-4" />
-            <span>Cross-Column Relational Rules ({profile.crossColumnIssues.length})</span>
           </button>
 
           <button
@@ -686,58 +674,7 @@ export const UniversalDataProfiler: React.FC<UniversalDataProfilerProps> = ({
         </div>
       )}
 
-      {/* TAB 3: CROSS-COLUMN RELATIONAL RULES */}
-      {activeTab === 'cross_rules' && (
-        <div className="space-y-4">
-          <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-sm space-y-3">
-            <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-emerald-500" />
-              Cross-Column Relational Integrity Rules
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Validates multi-column dependencies such as chronological sequences (Start Date ≤ End Date) and mathematical consistency (Quantity × Price ≈ Total).
-            </p>
-
-            {profile.crossColumnIssues.length === 0 ? (
-              <div className="p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-center text-xs text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900 font-medium">
-                All cross-column relational rules passed successfully! No chronology or arithmetic discrepancies discovered.
-              </div>
-            ) : (
-              <div className="space-y-3 pt-2">
-                {profile.crossColumnIssues.map((issue, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 rounded-2xl border border-rose-200 dark:border-rose-900 bg-rose-50/50 dark:bg-rose-950/30 space-y-3"
-                  >
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold text-rose-900 dark:text-rose-200 flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-rose-600" />
-                        {issue.ruleName}
-                      </h4>
-                      <span className="px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-900 text-rose-800 dark:text-rose-200 text-[10px] font-bold">
-                        {issue.violatingRowsCount} Violating Rows ({issue.severity} Severity)
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-300">{issue.description}</p>
-                    {issue.violatingSampleRows.length > 0 && (
-                      <div className="space-y-1 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] font-mono">
-                        <span className="text-[10px] text-slate-400 block font-sans font-bold uppercase">Sample Violations:</span>
-                        {issue.violatingSampleRows.map((sample, sIdx) => (
-                          <div key={sIdx} className="text-rose-700 dark:text-rose-300">
-                            Row {sample.row}: {sample.reason}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* TAB 4: CORRELATIONS & REDUNDANCY */}
+      {/* TAB 3: CORRELATIONS & REDUNDANCY */}
       {activeTab === 'correlations' && (
         <div className="space-y-4">
           <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-sm space-y-4">

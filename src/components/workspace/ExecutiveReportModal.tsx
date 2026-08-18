@@ -9,7 +9,8 @@ import {
   FileText, 
   CheckCircle2, 
   TrendingUp, 
-  AlertTriangle 
+  AlertTriangle,
+  BrainCircuit
 } from 'lucide-react';
 import { Dataset } from '../../types/dataset';
 
@@ -119,12 +120,42 @@ export const ExecutiveReportModal: React.FC<ExecutiveReportModalProps> = ({
               </p>
             </div>
 
+            {/* AI Analytical Thinking & Reasoning Stages */}
+            {summary?.thinkingProcess && summary.thinkingProcess.length > 0 && (
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-cyan-800 dark:text-cyan-300 bg-cyan-100/90 dark:bg-cyan-950/80 border border-cyan-300 dark:border-cyan-800 px-3 py-1 rounded-lg flex items-center gap-1.5 shadow-xs">
+                    <BrainCircuit className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
+                    2. AI Analytical Thinking & Scientific Rationale
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {summary.thinkingProcess.map((step) => (
+                    <div
+                      key={step.step}
+                      className="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-850/50 space-y-1 text-xs"
+                    >
+                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan-600 text-white text-[10px]">
+                          {step.step}
+                        </span>
+                        <span>{step.phase}</span>
+                      </div>
+                      <p className="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed pl-7">
+                        {step.reasoning}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Strategic Takeaways with Vibrant Color Signature */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-cyan-700 dark:text-cyan-300 bg-cyan-100/90 dark:bg-cyan-950/80 border border-cyan-300 dark:border-cyan-800 px-3 py-1 rounded-lg flex items-center gap-1.5 shadow-xs">
                   <Sparkles className="h-3.5 w-3.5 text-cyan-500 animate-pulse" />
-                  2. Key Strategic Observations
+                  3. Key Strategic Observations
                 </span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

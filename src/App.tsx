@@ -16,6 +16,7 @@ import { ExecutiveReportModal } from './components/workspace/ExecutiveReportModa
 import { FileUploadModal } from './components/workspace/FileUploadModal';
 import { LoginPage } from './components/auth/LoginPage';
 import { ThreeBackground } from './components/common/ThreeBackground';
+import { GlobalClickRipple } from './components/common/GlobalClickRipple';
 import { getInitialDatasets } from './data/sampleDatasets';
 import { Dataset } from './types/dataset';
 import { User } from './types/auth';
@@ -128,8 +129,11 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen relative bg-slate-100/90 dark:bg-slate-950/90 text-slate-900 dark:text-slate-100 font-sans selection:bg-cyan-500 selection:text-white transition-colors duration-300">
+    <div className="min-h-screen relative bg-[#050816] text-[#F8FAFC] font-sans selection:bg-[#00E5FF] selection:text-black transition-colors duration-300">
       
+      {/* Global Click Interactive Ripple Effect */}
+      <GlobalClickRipple />
+
       {/* Interactive 3D WebGL Background Canvas */}
       <ThreeBackground isDarkMode={isDarkMode} />
 
@@ -165,33 +169,33 @@ export default function App() {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <div className="mx-auto max-w-7xl">
             {!activeDataset ? (
-              <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 sm:p-12 rounded-3xl border border-dashed border-slate-300 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-xs my-6">
-                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-cyan-100 dark:bg-cyan-950/80 text-cyan-600 dark:text-cyan-400 mb-6 shadow-inner border border-cyan-200 dark:border-cyan-800">
+              <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 sm:p-12 rounded-3xl border border-dashed border-[#27345A] bg-[#10162B]/80 backdrop-blur-md shadow-2xl my-6">
+                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-[#151B35] text-[#00E5FF] mb-6 shadow-inner border border-[#27345A]">
                   <Database className="h-10 w-10" />
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] tracking-tight">
                   No Dataset Loaded
                 </h2>
-                <p className="mt-3 max-w-lg text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                <p className="mt-3 max-w-lg text-sm text-[#94A3B8] leading-relaxed font-medium">
                   Import your CSV, Excel (.xlsx, .xls), TSV, or JSON dataset to generate instant AI intelligence, data health diagnostics, custom charts, SQL searches, and predictive ML models.
                 </p>
 
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
                   <button
                     onClick={() => setIsUploadModalOpen(true)}
-                    className="flex items-center gap-2.5 rounded-2xl bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3.5 text-sm font-bold shadow-xl shadow-cyan-600/30 transition-all active:scale-95"
+                    className="flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-[#00E5FF] to-[#3B82F6] hover:brightness-110 text-[#050816] px-6 py-3.5 text-sm font-bold shadow-xl shadow-[#00E5FF]/20 transition-all active:scale-95"
                   >
                     <PlusCircle className="h-5 w-5" />
                     <span>Import Your Dataset</span>
                   </button>
                 </div>
 
-                <div className="mt-10 pt-8 border-t border-slate-200/80 dark:border-slate-800/80 w-full max-w-xl flex flex-wrap justify-center items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">Supported Formats:</span>
-                  <span className="rounded-lg bg-slate-100 dark:bg-slate-800 px-2.5 py-1 font-mono font-bold text-slate-700 dark:text-slate-300">CSV</span>
-                  <span className="rounded-lg bg-slate-100 dark:bg-slate-800 px-2.5 py-1 font-mono font-bold text-slate-700 dark:text-slate-300">XLSX</span>
-                  <span className="rounded-lg bg-slate-100 dark:bg-slate-800 px-2.5 py-1 font-mono font-bold text-slate-700 dark:text-slate-300">TSV</span>
-                  <span className="rounded-lg bg-slate-100 dark:bg-slate-800 px-2.5 py-1 font-mono font-bold text-slate-700 dark:text-slate-300">JSON</span>
+                <div className="mt-10 pt-8 border-t border-[#27345A] w-full max-w-xl flex flex-wrap justify-center items-center gap-3 text-xs text-[#94A3B8]">
+                  <span className="font-semibold text-[#CBD5E1]">Supported Formats:</span>
+                  <span className="rounded-lg bg-[#151B35] border border-[#27345A] px-2.5 py-1 font-mono font-bold text-[#00E5FF]">CSV</span>
+                  <span className="rounded-lg bg-[#151B35] border border-[#27345A] px-2.5 py-1 font-mono font-bold text-[#00E5FF]">XLSX</span>
+                  <span className="rounded-lg bg-[#151B35] border border-[#27345A] px-2.5 py-1 font-mono font-bold text-[#00E5FF]">TSV</span>
+                  <span className="rounded-lg bg-[#151B35] border border-[#27345A] px-2.5 py-1 font-mono font-bold text-[#00E5FF]">JSON</span>
                 </div>
               </div>
             ) : (

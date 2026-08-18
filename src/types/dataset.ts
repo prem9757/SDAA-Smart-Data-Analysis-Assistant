@@ -1,4 +1,5 @@
 import { DatasetProfile, AuditLogEntry, PrePostComparison } from './profiling';
+import { ComprehensiveIterativeCleaningReport, QualityScoreDimensions } from './validation';
 
 export type DataType = 'number' | 'string' | 'boolean' | 'date';
 
@@ -65,7 +66,14 @@ export interface SuggestedChart {
   reason: string;
 }
 
+export interface AIThinkingStep {
+  step: number;
+  phase: string;
+  reasoning: string;
+}
+
 export interface AISummary {
+  thinkingProcess?: AIThinkingStep[];
   executiveSummary: string;
   healthStatus: 'EXCELLENT' | 'GOOD' | 'WARNING' | 'CRITICAL';
   keyTakeaways: AITakeaway[];
@@ -88,6 +96,8 @@ export interface Dataset {
   profile?: DatasetProfile; // Complete universal profiling profile
   auditLog?: AuditLogEntry[];
   prePostComparison?: PrePostComparison;
+  cleaningReport?: ComprehensiveIterativeCleaningReport;
+  qualityDimensions?: QualityScoreDimensions;
   summary: AISummary | null;
   createdAt: string;
   isSample?: boolean;
@@ -137,6 +147,7 @@ export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  thinking?: string;
   timestamp: string;
   sqlQuery?: string;
   chartSuggestion?: ChartConfig;

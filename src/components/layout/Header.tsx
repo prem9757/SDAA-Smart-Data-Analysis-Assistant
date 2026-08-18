@@ -47,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-colors duration-300">
+    <header className="sticky top-0 z-40 w-full border-b border-[#27345A] bg-[#080D1F]/90 backdrop-blur-xl transition-colors duration-300">
       <div className="mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Left Branding & Dataset Switcher */}
@@ -56,23 +56,23 @@ export const Header: React.FC<HeaderProps> = ({
 
           {activeDataset && (
             <>
-              <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-800 hidden md:block" />
+              <div className="h-6 w-[1px] bg-[#27345A] hidden md:block" />
 
               {/* Dataset Switcher Dropdown */}
               <div className="relative">
                 <button
                   id="dataset-switcher-btn"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-750 bg-slate-50 dark:bg-slate-800/80 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-100 hover:border-cyan-500/50 hover:bg-slate-100 dark:hover:bg-slate-750 transition-all shadow-xs"
+                  className="flex items-center gap-2 rounded-xl border border-[#27345A] bg-[#10162B] px-3 py-1.5 text-xs sm:text-sm font-medium text-[#F8FAFC] hover:border-[#00E5FF]/60 hover:bg-[#151B35] transition-all shadow-md active:scale-98"
                 >
-                  <Database className="h-4 w-4 text-cyan-500 shrink-0" />
-                  <span className="max-w-[100px] sm:max-w-[180px] truncate font-semibold">
+                  <Database className="h-4 w-4 text-[#00E5FF] shrink-0" />
+                  <span className="max-w-[100px] sm:max-w-[180px] truncate font-semibold text-[#F8FAFC]">
                     {activeDataset.name}
                   </span>
-                  <span className="hidden sm:inline-block rounded-md bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 text-[10px] text-slate-600 dark:text-slate-300">
+                  <span className="hidden sm:inline-block rounded-md bg-[#151B35] border border-[#27345A] px-1.5 py-0.5 text-[10px] text-[#00E5FF] font-mono">
                     {activeDataset.rows.length} rows
                   </span>
-                  <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+                  <ChevronDown className="h-3.5 w-3.5 text-[#94A3B8]" />
                 </button>
 
                 {dropdownOpen && (
@@ -80,22 +80,22 @@ export const Header: React.FC<HeaderProps> = ({
                     initial={{ opacity: 0, y: 8, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                    className="absolute left-0 mt-2 w-80 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 shadow-2xl z-50"
+                    className="absolute left-0 mt-2 w-80 rounded-2xl border border-[#27345A] bg-[#10162B] p-2 shadow-2xl z-50 backdrop-blur-xl"
                   >
-                    <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex justify-between items-center">
-                      <span>Datasets ({datasets.length})</span>
+                    <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-[#94A3B8] flex justify-between items-center border-b border-[#27345A]/60 pb-2">
+                      <span>Available Datasets ({datasets.length})</span>
                       <button
                         onClick={() => {
                           setDropdownOpen(false);
                           onOpenUploadModal();
                         }}
-                        className="text-xs text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1 font-bold"
+                        className="text-xs text-[#00E5FF] hover:underline flex items-center gap-1 font-bold"
                       >
-                        <PlusCircle className="h-3.5 w-3.5" /> Add New Data
+                        <PlusCircle className="h-3.5 w-3.5" /> Add New
                       </button>
                     </div>
 
-                    <div className="mt-1 space-y-1 max-h-64 overflow-y-auto pr-1">
+                    <div className="mt-2 space-y-1 max-h-64 overflow-y-auto pr-1">
                       {datasets.map((ds) => (
                         <button
                           key={ds.id}
@@ -105,21 +105,21 @@ export const Header: React.FC<HeaderProps> = ({
                           }}
                           className={`w-full text-left rounded-xl p-2.5 transition-all flex items-start gap-3 ${
                             ds.id === activeDataset.id
-                              ? 'bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200 dark:border-cyan-800 text-cyan-900 dark:text-cyan-100'
-                              : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
+                              ? 'bg-[#151B35] border border-[#00E5FF]/50 text-[#F8FAFC] shadow-inner'
+                              : 'hover:bg-[#151B35]/60 text-[#CBD5E1]'
                           }`}
                         >
-                          <div className="mt-0.5 rounded-lg bg-cyan-100 dark:bg-cyan-900/50 p-1.5 text-cyan-600 dark:text-cyan-300">
+                          <div className="mt-0.5 rounded-lg bg-[#00E5FF]/10 p-1.5 text-[#00E5FF]">
                             <Layers className="h-4 w-4" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between">
-                              <p className="text-sm font-semibold truncate">{ds.name}</p>
-                              <span className="text-[10px] text-slate-500 font-medium">
+                              <p className="text-sm font-semibold truncate text-[#F8FAFC]">{ds.name}</p>
+                              <span className="text-[10px] text-[#94A3B8] font-mono">
                                 {ds.rows.length} rows
                               </span>
                             </div>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
+                            <p className="text-xs text-[#94A3B8] line-clamp-1 mt-0.5">
                               {ds.description || 'Uploaded dataset'}
                             </p>
                           </div>
@@ -127,13 +127,13 @@ export const Header: React.FC<HeaderProps> = ({
                       ))}
                     </div>
 
-                    <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <div className="mt-2 pt-2 border-t border-[#27345A]">
                       <button
                         onClick={() => {
                           setDropdownOpen(false);
                           onOpenUploadModal();
                         }}
-                        className="w-full flex items-center justify-center gap-2 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/60 text-cyan-700 dark:text-cyan-300 p-2 text-xs font-bold transition-all border border-cyan-200/60 dark:border-cyan-800/60"
+                        className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00E5FF]/20 to-[#3B82F6]/20 hover:from-[#00E5FF]/30 hover:to-[#3B82F6]/30 text-[#00E5FF] p-2 text-xs font-bold transition-all border border-[#00E5FF]/40"
                       >
                         <PlusCircle className="h-4 w-4" />
                         <span>Add New Data</span>
@@ -147,16 +147,16 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right Actions & Utilities */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Add New Data Button at the Top */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Add New Data Button - Styled as in reference image */}
           <button
             id="add-new-data-header-btn"
             onClick={onOpenUploadModal}
-            className="flex items-center gap-1.5 rounded-xl border border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-950/60 hover:bg-cyan-100 dark:hover:bg-cyan-900/80 text-cyan-700 dark:text-cyan-300 px-3 py-2 text-xs font-bold transition-all shadow-xs active:scale-95"
+            className="flex items-center gap-1.5 rounded-full border border-[#00E5FF] bg-[#10162B] hover:bg-[#00E5FF]/10 text-[#00E5FF] px-3.5 py-1.5 text-xs font-semibold transition-all shadow-md active:scale-95"
             title="Upload or import a new dataset"
           >
-            <PlusCircle className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
-            <span className="hidden sm:inline">Add New Data</span>
+            <PlusCircle className="h-4 w-4 text-[#00E5FF]" />
+            <span>Add New Data</span>
           </button>
 
           {/* Refresh Button */}
@@ -164,106 +164,93 @@ export const Header: React.FC<HeaderProps> = ({
             id="refresh-header-btn"
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all shadow-xs active:scale-95 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-full border border-[#27345A] bg-[#10162B] hover:bg-[#151B35] px-3.5 py-1.5 text-xs font-semibold text-[#CBD5E1] hover:text-[#F8FAFC] transition-all shadow-md active:scale-95 disabled:opacity-50"
             title="Refresh dataset analysis"
           >
-            <RefreshCw className={`h-4 w-4 text-teal-500 ${isRefreshing ? 'animate-spin' : ''}`} />
-            <span className="hidden md:inline">Refresh</span>
+            <RefreshCw className={`h-3.5 w-3.5 text-[#CBD5E1] ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
           </button>
 
-          {/* Executive Report Generator Button */}
+          {/* Executive Report Generator Button - Prominent Purple/Magenta Gradient Pill */}
           <button
             id="executive-report-header-btn"
             onClick={onOpenReportModal}
-            className="flex items-center gap-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white px-3.5 py-2 text-xs font-semibold shadow-md shadow-teal-600/20 transition-all active:scale-95"
+            className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#7C3AED] via-[#9333EA] to-[#EC4899] hover:brightness-110 text-white px-4 py-1.5 text-xs font-bold shadow-lg shadow-[#9333EA]/30 transition-all active:scale-95"
           >
-            <FileText className="h-4 w-4" />
-            <span className="hidden lg:inline">Executive Report</span>
+            <FileText className="h-3.5 w-3.5" />
+            <span>Executive Report</span>
           </button>
 
-          {/* Dark / Light Mode Toggle Button */}
+          {/* Light / Dark Mode Toggle Button */}
           <button
             id="theme-toggle-btn"
             onClick={onToggleTheme}
-            className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all shadow-xs active:scale-95"
+            className="flex items-center gap-1.5 rounded-full border border-[#27345A] bg-[#10162B] hover:bg-[#151B35] px-3.5 py-1.5 text-xs font-semibold text-[#FACC15] transition-all shadow-md active:scale-95"
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {isDarkMode ? (
-              <>
-                <Sun className="h-4 w-4 text-amber-400 animate-spin-slow" />
-                <span className="hidden xl:inline text-amber-400">Light</span>
-              </>
-            ) : (
-              <>
-                <Moon className="h-4 w-4 text-cyan-600" />
-                <span className="hidden xl:inline text-cyan-600">Dark</span>
-              </>
-            )}
+            <Sun className="h-3.5 w-3.5 text-[#FACC15]" />
+            <span>Light</span>
           </button>
 
-          {/* Logged In User Profile & Logout Button */}
-          {currentUser && (
-            <div className="relative pl-1 border-l border-slate-200 dark:border-slate-800">
-              <button
-                id="user-profile-header-btn"
-                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-750 bg-slate-50 dark:bg-slate-800/90 px-2.5 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-750 transition-all shadow-xs"
+          {/* Logged In User Profile - Sarah Chen with circular magenta badge */}
+          <div className="relative pl-1">
+            <button
+              id="user-profile-header-btn"
+              onClick={() => setUserMenuOpen(!userMenuOpen)}
+              className="flex items-center gap-2 rounded-full border border-transparent hover:border-[#27345A] bg-transparent hover:bg-[#10162B] px-2 py-1 transition-all active:scale-98"
+            >
+              <div className="h-8 w-8 rounded-full bg-[#EC4899] flex items-center justify-center text-xs font-bold text-white shadow-md">
+                SC
+              </div>
+              <div className="hidden sm:block text-left">
+                <p className="text-xs font-bold leading-tight text-[#F8FAFC]">
+                  {currentUser ? currentUser.name : 'Sarah Chen'}
+                </p>
+                <p className="text-[10px] text-[#94A3B8] font-normal">
+                  {currentUser ? currentUser.role : 'Lead Data Scientist'}
+                </p>
+              </div>
+              <ChevronDown className="h-3.5 w-3.5 text-[#94A3B8]" />
+            </button>
+
+            {userMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                className="absolute right-0 mt-2 w-64 rounded-2xl border border-[#27345A] bg-[#10162B] p-3 shadow-2xl z-50 backdrop-blur-xl"
               >
-                <div className="h-7 w-7 rounded-lg bg-gradient-to-tr from-cyan-500 to-teal-500 flex items-center justify-center text-xs font-extrabold text-white shadow-xs">
-                  {currentUser.name.charAt(0)}
-                </div>
-                <div className="hidden xl:block text-left">
-                  <p className="text-xs font-bold leading-tight text-slate-900 dark:text-slate-100 truncate max-w-[110px]">
-                    {currentUser.name}
-                  </p>
-                  <p className="text-[10px] text-cyan-600 dark:text-cyan-400 font-semibold truncate max-w-[110px]">
-                    {currentUser.role}
-                  </p>
-                </div>
-                <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
-              </button>
-
-              {userMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                  className="absolute right-0 mt-2 w-64 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 shadow-2xl z-50"
-                >
-                  <div className="pb-2.5 mb-2 border-b border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center gap-2">
-                      <UserCheck className="h-4 w-4 text-cyan-500" />
-                      <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                        {currentUser.name}
-                      </p>
-                    </div>
-                    <p className="text-[11px] text-slate-500 truncate mt-0.5">
-                      {currentUser.email}
+                <div className="pb-2.5 mb-2 border-b border-[#27345A]">
+                  <div className="flex items-center gap-2">
+                    <UserCheck className="h-4 w-4 text-[#00E5FF]" />
+                    <p className="text-xs font-bold text-[#F8FAFC] truncate">
+                      {currentUser ? currentUser.name : 'Sarah Chen'}
                     </p>
-                    <div className="mt-2 flex items-center justify-between text-[10px]">
-                      <span className="px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 font-semibold">
-                        {currentUser.role}
-                      </span>
-                      <span className="text-slate-400">
-                        {currentUser.department || 'Data Unit'}
-                      </span>
-                    </div>
                   </div>
+                  <p className="text-[11px] text-[#94A3B8] truncate mt-0.5">
+                    {currentUser ? currentUser.email : 'sarah.chen@sdaa.ai'}
+                  </p>
+                  <div className="mt-2 flex items-center justify-between text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-[#151B35] border border-[#27345A] text-[#00E5FF] font-semibold">
+                      {currentUser ? currentUser.role : 'Lead Data Scientist'}
+                    </span>
+                    <span className="text-[#94A3B8]">Data Unit</span>
+                  </div>
+                </div>
 
-                  <button
-                    onClick={() => {
-                      setUserMenuOpen(false);
-                      if (onLogout) onLogout();
-                    }}
-                    className="w-full flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>Sign Out of Workspace</span>
-                  </button>
-                </motion.div>
-              )}
-            </div>
-          )}
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    if (onLogout) onLogout();
+                  }}
+                  className="w-full flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-[#F43F5E] hover:bg-[#F43F5E]/10 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Sign Out of Workspace</span>
+                </button>
+              </motion.div>
+            )}
+          </div>
         </div>
 
       </div>

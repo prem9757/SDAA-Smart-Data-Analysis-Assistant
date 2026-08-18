@@ -113,32 +113,48 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
     // Mode-specific 3D objects
     const cleanupCallbacks: (() => void)[] = [];
 
-    // Colors based on theme
-    const primaryColorHex = isDarkMode ? 0x06b6d4 : 0x0284c7; // Cyan / Sky
-    const secondaryColorHex = isDarkMode ? 0x3b82f6 : 0x6366f1; // Blue / Indigo
-    const accentColorHex = isDarkMode ? 0x10b981 : 0x0d9488; // Emerald / Teal
+    // Colors based on new theme
+    const cyanHex = 0x00e5ff;
+    const blueHex = 0x3b82f6;
+    const purpleHex = 0x7c3aed;
+    const magentaHex = 0xec4899;
+    const primaryColorHex = cyanHex;
+    const secondaryColorHex = purpleHex;
 
     // -------------------------------------------------------------
-    // MODE 1: DATA CONSTELLATION
+    // MODE 1: DATA CONSTELLATION / NEURAL NETWORK
     // -------------------------------------------------------------
     if (mode === 'constellation') {
-      const particleCount = Math.floor(90 * density);
+      const particleCount = Math.floor(100 * density);
       const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
       const velocities: THREE.Vector3[] = [];
       const particleGroup = new THREE.Group();
       scene.add(particleGroup);
 
-      const bounds = 45;
+      const bounds = 48;
+      const themeColors = [
+        new THREE.Color(cyanHex),
+        new THREE.Color(blueHex),
+        new THREE.Color(purpleHex),
+        new THREE.Color(magentaHex)
+      ];
+
       for (let i = 0; i < particleCount; i++) {
         positions[i * 3] = (Math.random() - 0.5) * bounds * 2;
         positions[i * 3 + 1] = (Math.random() - 0.5) * bounds * 1.5;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * bounds;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * bounds * 1.2;
+
+        const c = themeColors[i % themeColors.length];
+        colors[i * 3] = c.r;
+        colors[i * 3 + 1] = c.g;
+        colors[i * 3 + 2] = c.b;
 
         velocities.push(
           new THREE.Vector3(
-            (Math.random() - 0.5) * 0.04 * speed,
-            (Math.random() - 0.5) * 0.04 * speed,
-            (Math.random() - 0.5) * 0.03 * speed
+            (Math.random() - 0.5) * 0.035 * speed,
+            (Math.random() - 0.5) * 0.035 * speed,
+            (Math.random() - 0.5) * 0.025 * speed
           )
         );
       }
@@ -146,34 +162,36 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
       // Point cloud
       const particleGeo = new THREE.BufferGeometry();
       particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-      // Custom circular particle texture
+      // Custom circular glowing particle texture
       const canvas = document.createElement('canvas');
       canvas.width = 64;
       canvas.height = 64;
       const ctx = canvas.getContext('2d')!;
       const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
       gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-      gradient.addColorStop(0.3, isDarkMode ? 'rgba(6, 182, 212, 0.8)' : 'rgba(2, 132, 199, 0.8)');
-      gradient.addColorStop(0.7, isDarkMode ? 'rgba(59, 130, 246, 0.3)' : 'rgba(99, 102, 241, 0.3)');
+      gradient.addColorStop(0.25, 'rgba(0, 229, 255, 0.9)');
+      gradient.addColorStop(0.65, 'rgba(124, 58, 237, 0.35)');
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 64, 64);
       const particleTexture = new THREE.CanvasTexture(canvas);
 
       const particleMat = new THREE.PointsMaterial({
-        size: isDarkMode ? 2.4 : 2.0,
+        size: 2.6,
         map: particleTexture,
+        vertexColors: true,
         transparent: true,
-        opacity: isDarkMode ? 0.75 : 0.55,
-        blending: isDarkMode ? THREE.AdditiveBlending : THREE.NormalBlending,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
 
       const particlePoints = new THREE.Points(particleGeo, particleMat);
       particleGroup.add(particlePoints);
 
-      // Line mesh for dynamic connections
+      // Line mesh for dynamic neural connections
       const maxConnections = particleCount * 6;
       const linePositions = new Float32Array(maxConnections * 6);
       const lineColors = new Float32Array(maxConnections * 6);
@@ -185,8 +203,8 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
       const lineMat = new THREE.LineBasicMaterial({
         vertexColors: true,
         transparent: true,
-        opacity: isDarkMode ? 0.45 : 0.3,
-        blending: isDarkMode ? THREE.AdditiveBlending : THREE.NormalBlending,
+        opacity: 0.4,
+        blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
 
@@ -200,7 +218,7 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
 
         let vertexPos = 0;
         let colorPos = 0;
-        const connectionDist = 18;
+        const connectionDist = 17;
 
         for (let i = 0; i < particleCount; i++) {
           // Update particle positions with bounce
@@ -210,7 +228,7 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
 
           if (Math.abs(currentPos[i * 3]) > bounds) velocities[i].x *= -1;
           if (Math.abs(currentPos[i * 3 + 1]) > bounds * 0.75) velocities[i].y *= -1;
-          if (Math.abs(currentPos[i * 3 + 2]) > bounds * 0.5) velocities[i].z *= -1;
+          if (Math.abs(currentPos[i * 3 + 2]) > bounds * 0.6) velocities[i].z *= -1;
 
           // Connect nearby particles
           for (let j = i + 1; j < particleCount; j++) {
@@ -220,7 +238,7 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
             const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
             if (dist < connectionDist && vertexPos < maxConnections * 6) {
-              const alpha = 1.0 - dist / connectionDist;
+              const alpha = (1.0 - dist / connectionDist);
 
               // Line start
               linePositions[vertexPos++] = currentPos[i * 3];
@@ -232,18 +250,14 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
               linePositions[vertexPos++] = currentPos[j * 3 + 1];
               linePositions[vertexPos++] = currentPos[j * 3 + 2];
 
-              // Line color gradient
-              const r = isDarkMode ? 0.05 * alpha : 0.2 * alpha;
-              const g = isDarkMode ? 0.75 * alpha : 0.5 * alpha;
-              const b = isDarkMode ? 0.95 * alpha : 0.8 * alpha;
+              // Cyan to Purple neon gradient
+              lineColors[colorPos++] = 0.0 * alpha;
+              lineColors[colorPos++] = 0.9 * alpha;
+              lineColors[colorPos++] = 1.0 * alpha;
 
-              lineColors[colorPos++] = r;
-              lineColors[colorPos++] = g;
-              lineColors[colorPos++] = b;
-
-              lineColors[colorPos++] = r;
-              lineColors[colorPos++] = g;
-              lineColors[colorPos++] = b;
+              lineColors[colorPos++] = 0.48 * alpha;
+              lineColors[colorPos++] = 0.22 * alpha;
+              lineColors[colorPos++] = 0.92 * alpha;
             }
           }
         }
@@ -253,8 +267,8 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
         (lineGeo.attributes.position as THREE.BufferAttribute).needsUpdate = true;
         (lineGeo.attributes.color as THREE.BufferAttribute).needsUpdate = true;
 
-        particleGroup.rotation.y += 0.0006 * speed;
-        particleGroup.rotation.x += 0.0003 * speed;
+        particleGroup.rotation.y += 0.0004 * speed;
+        particleGroup.rotation.x += 0.0002 * speed;
       };
 
       cleanupCallbacks.push(() => {
@@ -583,17 +597,17 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 15, scale: 0.95 }}
               transition={{ duration: 0.18 }}
-              className="w-72 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-4 shadow-2xl backdrop-blur-xl text-slate-800 dark:text-slate-100 text-xs space-y-3.5 mb-1"
+              className="w-72 rounded-3xl border border-[#27345A] bg-[#10162B]/95 p-4 shadow-2xl backdrop-blur-xl text-[#F8FAFC] text-xs space-y-3.5 mb-1"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+              <div className="flex items-center justify-between border-b border-[#27345A] pb-2.5">
                 <div className="flex items-center gap-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-500">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#00E5FF]/10 text-[#00E5FF]">
                     <Sparkles className="h-4 w-4" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-900 dark:text-white">3D Dynamic Canvas</h3>
-                    <p className="text-[10px] text-slate-400">Interactive WebGL Background</p>
+                    <h3 className="font-bold text-[#F8FAFC]">3D Universe Canvas</h3>
+                    <p className="text-[10px] text-[#94A3B8]">GPU WebGL Neural Visualizer</p>
                   </div>
                 </div>
 
@@ -601,7 +615,7 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
                   type="button"
                   onClick={() => setIsEnabled(!isEnabled)}
                   className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                    isEnabled ? 'bg-cyan-500' : 'bg-slate-300 dark:bg-slate-700'
+                    isEnabled ? 'bg-[#00E5FF]' : 'bg-[#27345A]'
                   }`}
                   role="switch"
                   aria-checked={isEnabled}
@@ -619,16 +633,16 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
                 <>
                   {/* Mode Presets */}
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                      3D Preset Mode
+                    <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">
+                      3D Environment Mode
                     </label>
                     <div className="grid grid-cols-2 gap-1.5">
                       {(
                         [
-                          { id: 'constellation', name: 'Constellation', icon: Orbit },
+                          { id: 'constellation', name: 'Neural Network', icon: Orbit },
                           { id: 'polyhedrons', name: '3D Crystals', icon: Box },
                           { id: 'waves', name: 'Data Waves', icon: Waves },
-                          { id: 'vortex', name: 'Cyber Vortex', icon: Sparkles },
+                          { id: 'vortex', name: 'Data Vortex', icon: Sparkles },
                         ] as const
                       ).map(item => {
                         const Icon = item.icon;
@@ -640,13 +654,13 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
                             onClick={() => setMode(item.id)}
                             className={`flex items-center gap-2 p-2 rounded-xl border text-[11px] font-bold transition-all ${
                               active
-                                ? 'bg-cyan-500/15 border-cyan-500/50 text-cyan-600 dark:text-cyan-400 shadow-xs'
-                                : 'border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                ? 'bg-gradient-to-r from-[#7C3AED]/30 to-[#3B82F6]/30 border-[#00E5FF] text-[#00E5FF] shadow-xs'
+                                : 'border-[#27345A] bg-[#0B1024]/60 hover:bg-[#151B35] text-[#CBD5E1]'
                             }`}
                           >
                             <Icon className="h-3.5 w-3.5 shrink-0" />
                             <span>{item.name}</span>
-                            {active && <Check className="h-3 w-3 ml-auto text-cyan-500" />}
+                            {active && <Check className="h-3 w-3 ml-auto text-[#00E5FF]" />}
                           </button>
                         );
                       })}
@@ -654,10 +668,10 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
                   </div>
 
                   {/* Speed & Density Sliders */}
-                  <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                  <div className="space-y-2 pt-1 border-t border-[#27345A]">
                     <div className="flex items-center justify-between text-[11px] font-semibold">
-                      <span className="text-slate-500 dark:text-slate-400">Animation Speed:</span>
-                      <span className="text-cyan-500 font-bold">{speed.toFixed(1)}x</span>
+                      <span className="text-[#94A3B8]">Simulation Velocity:</span>
+                      <span className="text-[#00E5FF] font-bold">{speed.toFixed(1)}x</span>
                     </div>
                     <input
                       type="range"
@@ -666,12 +680,12 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
                       step="0.1"
                       value={speed}
                       onChange={(e) => setSpeed(Number(e.target.value))}
-                      className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                      className="w-full h-1.5 bg-[#27345A] rounded-lg appearance-none cursor-pointer accent-[#00E5FF]"
                     />
 
                     <div className="flex items-center justify-between text-[11px] font-semibold pt-1">
-                      <span className="text-slate-500 dark:text-slate-400">Particle Density:</span>
-                      <span className="text-cyan-500 font-bold">{density.toFixed(1)}x</span>
+                      <span className="text-[#94A3B8]">Node Density:</span>
+                      <span className="text-[#00E5FF] font-bold">{density.toFixed(1)}x</span>
                     </div>
                     <input
                       type="range"
@@ -680,14 +694,14 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
                       step="0.1"
                       value={density}
                       onChange={(e) => setDensity(Number(e.target.value))}
-                      className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                      className="w-full h-1.5 bg-[#27345A] rounded-lg appearance-none cursor-pointer accent-[#00E5FF]"
                     />
                   </div>
                 </>
               )}
 
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 pt-1 text-center font-medium">
-                Tip: Move your mouse to explore 3D parallax depth
+              <div className="text-[10px] text-[#94A3B8] pt-1 text-center font-medium">
+                Parallax active: Data universe reacts to mouse depth
               </div>
             </motion.div>
           )}
@@ -699,14 +713,14 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({
           onClick={() => setShowControls(!showControls)}
           className={`flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-xs font-bold shadow-xl border backdrop-blur-md transition-all active:scale-95 ${
             showControls
-              ? 'bg-cyan-600 text-white border-cyan-400 shadow-cyan-600/30'
-              : 'bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-cyan-500'
+              ? 'bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white border-[#EC4899] shadow-lg shadow-[#7C3AED]/30'
+              : 'bg-[#10162B]/90 text-[#F8FAFC] border-[#27345A] hover:border-[#00E5FF]'
           }`}
-          title="3D Background Animation Settings"
+          title="3D Universe Settings"
         >
-          <Orbit className={`h-4 w-4 ${isEnabled ? 'text-cyan-400 animate-spin-slow' : 'text-slate-400'}`} />
-          <span className="hidden sm:inline">3D Universe</span>
-          <span className="flex h-2 w-2 rounded-full bg-cyan-500" />
+          <Orbit className={`h-4 w-4 ${isEnabled ? 'text-[#00E5FF] animate-spin-slow' : 'text-[#94A3B8]'}`} />
+          <span className="hidden sm:inline">3D Data Universe</span>
+          <span className="flex h-2 w-2 rounded-full bg-[#00E5FF]" />
         </button>
       </div>
     </>
